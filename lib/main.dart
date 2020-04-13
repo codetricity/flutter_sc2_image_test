@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:imagetest/download_ready.dart';
 import 'last_file.dart';
+import 'get_exposure_delay.dart';
 
 void main() {
   runApp(MyApp());
@@ -34,11 +35,26 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   String url = 'https://picsum.photos/200';
+  Color selfTimerButtonColor = Colors.blueGrey;
+
   void _getPicture() async {
     await downloadReady();
     String tempUrl = await lastFile();
     setState(() {
       url = tempUrl;
+    });
+  }
+
+  void _getExposureDelay() async {
+    int currentExposureDelay = await getExposureDelay();
+    setState(() {
+      if (currentExposureDelay == 0) {
+        //TODO: set exposure delay to 5
+        selfTimerButtonColor = Colors.blueGrey;
+      } else {
+        selfTimerButtonColor = Colors.blue;
+        //TODO: set exposureDelay to 0
+      }
     });
   }
 
@@ -57,13 +73,29 @@ class _MyHomePageState extends State<MyHomePage> {
               'hello',
               style: Theme.of(context).textTheme.headline4,
             ),
+            SizedBox(
+              height: 100.0,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                FloatingActionButton(
+                  tooltip: 'Self-Timer',
+                  onPressed: getExposureDelay,
+                  backgroundColor: selfTimerButtonColor,
+                  child: Icon(
+                    Icons.timer,
+                  ),
+                ),
+                FloatingActionButton(
+                  onPressed: _getPicture,
+                  tooltip: 'Take Picture',
+                  child: Icon(Icons.camera_enhance),
+                ),
+              ],
+            ),
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _getPicture,
-        tooltip: 'Take Picture',
-        child: Icon(Icons.camera_enhance),
       ),
     );
   }
