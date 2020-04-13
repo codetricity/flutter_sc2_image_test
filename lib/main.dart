@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:imagetest/download_ready.dart';
 import 'last_file.dart';
 import 'get_exposure_delay.dart';
+import 'set_exposure_delay_five.dart';
+import 'set_exposure_delay_zero.dart';
 
 void main() {
   runApp(MyApp());
@@ -47,13 +49,19 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _getExposureDelay() async {
     int currentExposureDelay = await getExposureDelay();
+    if (currentExposureDelay == 0 ) {
+      print('setting exposure delay');
+      await setExposureDelayFive();
+    } else {
+      print('disabling exposure delay');
+      await setExposureDelayZero();
+    }
     setState(() {
       if (currentExposureDelay == 0) {
-        //TODO: set exposure delay to 5
-        selfTimerButtonColor = Colors.blueGrey;
-      } else {
         selfTimerButtonColor = Colors.blue;
-        //TODO: set exposureDelay to 0
+        print(currentExposureDelay);
+      } else {
+        selfTimerButtonColor = Colors.blueGrey;
       }
     });
   }
@@ -81,7 +89,7 @@ class _MyHomePageState extends State<MyHomePage> {
               children: <Widget>[
                 FloatingActionButton(
                   tooltip: 'Self-Timer',
-                  onPressed: getExposureDelay,
+                  onPressed: _getExposureDelay,
                   backgroundColor: selfTimerButtonColor,
                   child: Icon(
                     Icons.timer,
