@@ -48,6 +48,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _getExposureDelay() async {
+    //TODO: create new function to check on status of last command
     int currentExposureDelay = await getExposureDelay();
     if (currentExposureDelay == 0 ) {
       print('setting exposure delay');
