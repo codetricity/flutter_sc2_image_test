@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'dart:math';
-
 import 'package:imagetest/download_ready.dart';
+import 'last_file.dart';
 
 void main() {
   runApp(MyApp());
@@ -34,13 +33,12 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  String url = 'https://picsum.photos/200?random';
-  void _getPicture() {
+  String url = 'https://picsum.photos/200';
+  void _getPicture() async {
+    await downloadReady();
+    String tempUrl = await lastFile();
     setState(() {
-
-      Random random = Random();
-      int randomNum = random.nextInt(1000);
-      url = 'https://picsum.photos/200?random=1';
+      url = tempUrl;
     });
   }
 
@@ -63,7 +61,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: downloadReady,
+        onPressed: _getPicture,
         tooltip: 'Take Picture',
         child: Icon(Icons.camera_enhance),
       ),
